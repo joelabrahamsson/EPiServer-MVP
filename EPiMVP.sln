@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiMVP", "EPiMVP\EPiMVP.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiMVP.StructureMap", "EPiMVP.StructureMap\EPiMVP.StructureMap.csproj", "{6252F7B3-5CE3-4F5F-9B4E-F00F8C4F0A25}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiMVP.Ninject", "EPiMVP.Ninject\EPiMVP.Ninject.csproj", "{57801993-5756-4E46-B4D4-A0C1AF0F9F32}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{6252F7B3-5CE3-4F5F-9B4E-F00F8C4F0A25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6252F7B3-5CE3-4F5F-9B4E-F00F8C4F0A25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6252F7B3-5CE3-4F5F-9B4E-F00F8C4F0A25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57801993-5756-4E46-B4D4-A0C1AF0F9F32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57801993-5756-4E46-B4D4-A0C1AF0F9F32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57801993-5756-4E46-B4D4-A0C1AF0F9F32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57801993-5756-4E46-B4D4-A0C1AF0F9F32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
