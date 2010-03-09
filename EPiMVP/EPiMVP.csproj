@@ -67,6 +67,7 @@
     <Compile Include="EPiView.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="IEPiView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

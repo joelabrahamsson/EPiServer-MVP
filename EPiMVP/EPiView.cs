@@ -6,17 +6,6 @@ using WebFormsMvp.Web;
 
 namespace EPiMVP
 {
-
-    public interface IEPiView<TModel> : IEPiView, IView<TModel> where TModel : class, new()
-    {
-
-    }
-
-    public interface IEPiView : IView
-    {
-        PageData CurrentPage { get; set; }
-    }
-
     /// <summary>
     /// Represents a page that is a view in a Web Forms Model-View-Presenter application.
     /// </summary>
@@ -32,7 +21,6 @@ namespace EPiMVP
             base.OnInit(e);
         }
     }
-
 
     /// <summary>
     /// Represents a page that is a view with a strongly typed model in a Web Forms Model-View-Presenter application.
