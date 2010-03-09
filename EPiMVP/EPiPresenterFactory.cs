@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Web;
 using PageTypeBuilder;
 using WebFormsMvp;
 using WebFormsMvp.Binder;
-using EPiServer.Core;
 
-namespace WebFormsMvp.EPiServer
+namespace EPiMVP
 {
     /// <summary>
     /// A IPresenterFactory that can act as a Factory for the PresenterBinder in the Web Forms MVP framework,
@@ -16,9 +12,6 @@ namespace WebFormsMvp.EPiServer
     /// </summary>
     public class EPiPresenterFactory : IPresenterFactory
     {
-
-        #region IPresenterFactory Members
-
         /// <summary>
         /// Creates the specified Presenter type. Called by the Web Forms MVP Framework.
         /// </summary>
@@ -29,7 +22,6 @@ namespace WebFormsMvp.EPiServer
         public IPresenter Create(Type presenterType, Type viewType, IView viewInstance)
         {
             // Validate the View 
-            ;
             if (!typeof(IEPiView).IsAssignableFrom(viewType))
                 throw new InvalidCastException("This kernel can (and should) only create a presenter if the View implements IEPiView. Got " + viewType);
 
@@ -37,14 +29,37 @@ namespace WebFormsMvp.EPiServer
             if (epiView.CurrentPage == null)
                 throw new NullReferenceException("CurrentPage property of the viewInstance was null. The presenter needs a proper page data to render. ");
 
+            Type pageDataType = GetPageDataType(epiView);
+
+            Type genericPresenterViewType = GetGenericPresenterViewType(viewType);
+
+            // Validate and check the Presenter type.
+            var correctPresenterType = typeof(EPiPresenter<,>).MakeGenericType(new Type[] { genericPresenterViewType, pageDataType });
+            if (!presenterType.IsSubclassOf(correctPresenterType))
+                throw new InvalidCastException("Tried to create presenter of type " +presenterType + 
+                    ". This kernel can (and should) only create presenters that are a subclass of " + correctPresenterType + "."+
+                    " This bugger, however, is a subclass of " + presenterType.BaseType);
+            
+            // Check if the Presenter has a usable constructor.
+            if (!CanCreateInstance(viewType, pageDataType, presenterType))
+                throw new NullReferenceException("Did not find a suitable constructor on the presenter of type " + presenterType + ". "
+                                                 + "The presenter constructor requires two parameters, the FIRST one accepting a " + viewType + " and a the SECOND one a " + pageDataType + ".");
+            return (IPresenter)CreatePresenterInstance(presenterType, (TypedPageData)epiView.CurrentPage, viewType, epiView);
+        }
+
+        protected Type GetPageDataType(IEPiView epiView)
+        {
             var pageDataType = epiView.CurrentPage.GetType();
 
             // when PageTypeBuilder is at work, the PageData will be a proxy object. In this case, get the base class.
             var isProxyObject = pageDataType.ToString().ToLower().Contains("proxy");
             if (isProxyObject)
                 pageDataType = pageDataType.BaseType;
+            return pageDataType;
+        }
 
-            
+        private Type GetGenericPresenterViewType(Type viewType)
+        {
             // Find out if the View is abstracted into an interface with the same name
             // I.e. WidgetView -> IWidgetView
             Type abstractionInterface = null;
@@ -60,34 +75,29 @@ namespace WebFormsMvp.EPiServer
 
             // If it is abstracted, expect the presenter to use the abstraction. 
             // Otherwise, use the vanilla viewtype. 
-            var genericPresenterViewType = abstractionInterface ?? viewType;
+            return abstractionInterface ?? viewType;
+        }
 
-            // Validate and check the Presenter type.
-            var correctPresenterType = typeof(EPiPresenter<,>).MakeGenericType(new Type[] { genericPresenterViewType, pageDataType });
-            if (!presenterType.IsSubclassOf(correctPresenterType))
-                throw new InvalidCastException("Tried to create presenter of type " +presenterType + 
-                    ". This kernel can (and should) only create presenters that are a subclass of " + correctPresenterType + "."+
-                    " This bugger, however, is a subclass of " + presenterType.BaseType);
-            
-            // Check if the Presenter has a usable constructor.
+        protected virtual bool CanCreateInstance(Type viewType, Type pageDataType, Type presenterType)
+        {
             var constructors = presenterType.GetConstructors();
-            var foundValidConstructor = false;
             foreach (var constructor in constructors)
             {
-                var constructorParameters = constructor.GetParameters();
-                var signatureIsUsable = constructorParameters[0].ParameterType.IsAssignableFrom(viewType) &&
-                                        constructorParameters[1].ParameterType.IsAssignableFrom(pageDataType) &&
-                                        constructorParameters.Length == 2;
-                if (signatureIsUsable)
+                if (CanUseConstructor(constructor, viewType, pageDataType))
                 {
-                    foundValidConstructor = true;
-                    break;
+                    return true;
                 }
             }
-            if (!foundValidConstructor)
-                throw new NullReferenceException("Did not find a suitable constructor on the presenter of type " + presenterType + ". "
-                                                 + "The presenter constructor requires two parameters, the FIRST one accepting a " + viewType + " and a the SECOND one a " + pageDataType + ".");
-            return (IPresenter)CreatePresenterInstance(presenterType, (TypedPageData)epiView.CurrentPage, epiView);
+
+            return false;
+        }
+
+        protected virtual bool CanUseConstructor(ConstructorInfo constructor, Type viewType, Type pageDataType)
+        {
+            var constructorParameters = constructor.GetParameters();
+            return constructorParameters[0].ParameterType.IsAssignableFrom(viewType) &&
+                   constructorParameters[1].ParameterType.IsAssignableFrom(pageDataType) &&
+                   constructorParameters.Length == 2;
         }
 
         /// <summary>
@@ -96,11 +106,7 @@ namespace WebFormsMvp.EPiServer
         /// overridden in case you need to do more stuff to the Presenter
         /// when creating it (injecting services using an IOC container, for instance).
         /// </summary>
-        /// <param name="presenterType"></param>
-        /// <param name="pageData"></param>
-        /// <param name="view"></param>
-        /// <returns></returns>
-        protected virtual IPresenter CreatePresenterInstance(Type presenterType, TypedPageData pageData, IEPiView view)
+        protected virtual IPresenter CreatePresenterInstance(Type presenterType, TypedPageData pageData, Type viewType, IEPiView view)
         {
             return (IPresenter)Activator.CreateInstance(presenterType, new object[] { view, pageData });
         }
@@ -115,9 +121,5 @@ namespace WebFormsMvp.EPiServer
         {
             
         }
-
-        #endregion
-
-
     }
 }

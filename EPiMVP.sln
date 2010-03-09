@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiMVP", "EPiMVP\EPiMVP.csproj", "{97DBD426-8D52-4201-A781-C9F553517837}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiMVP.StructureMap", "EPiMVP.StructureMap\EPiMVP.StructureMap.csproj", "{6252F7B3-5CE3-4F5F-9B4E-F00F8C4F0A25}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{97DBD426-8D52-4201-A781-C9F553517837}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97DBD426-8D52-4201-A781-C9F553517837}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97DBD426-8D52-4201-A781-C9F553517837}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6252F7B3-5CE3-4F5F-9B4E-F00F8C4F0A25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6252F7B3-5CE3-4F5F-9B4E-F00F8C4F0A25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6252F7B3-5CE3-4F5F-9B4E-F00F8C4F0A25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6252F7B3-5CE3-4F5F-9B4E-F00F8C4F0A25}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

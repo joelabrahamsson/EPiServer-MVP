@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using EPiServer.Core;
-using PageTypeBuilder;
+﻿using PageTypeBuilder;
+using WebFormsMvp;
 
-namespace WebFormsMvp.EPiServer
+namespace EPiMVP
 {
     public abstract class EPiPresenter<TView, TPageDataType> : Presenter<TView> where TView : class, IView where TPageDataType : TypedPageData
     {

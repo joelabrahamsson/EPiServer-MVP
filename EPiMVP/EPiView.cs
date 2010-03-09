@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using EPiServer;
 using EPiServer.Core;
-using WebFormsMvp.Binder;
+using WebFormsMvp;
 using WebFormsMvp.Web;
 
-namespace WebFormsMvp.EPiServer
+namespace EPiMVP
 {
 
     public interface IEPiView<TModel> : IEPiView, IView<TModel> where TModel : class, new()

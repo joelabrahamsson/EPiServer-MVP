@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{97DBD426-8D52-4201-A781-C9F553517837}</ProjectGuid>
+    <ProjectGuid>{6252F7B3-5CE3-4F5F-9B4E-F00F8C4F0A25}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EPiMVP</RootNamespace>
-    <AssemblyName>EPiMVP</AssemblyName>
+    <RootNamespace>EPiMVP.StructureMap</RootNamespace>
+    <AssemblyName>EPiMVP.StructureMap</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -43,11 +43,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\PageTypeBuilder.dll</HintPath>
     </Reference>
+    <Reference Include="StructureMap, Version=2.6.1.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\StructureMap.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -62,12 +65,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EPiPresenter.cs" />
-    <Compile Include="EPiPresenterFactory.cs" />
-    <Compile Include="EPiView.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
+    <Compile Include="StructureMapPresenterFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EPiMVP\EPiMVP.csproj">
+      <Project>{97DBD426-8D52-4201-A781-C9F553517837}</Project>
+      <Name>EPiMVP</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
