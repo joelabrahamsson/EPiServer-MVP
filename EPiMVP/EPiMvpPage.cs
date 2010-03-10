@@ -9,7 +9,7 @@ namespace EPiMVP
     /// <summary>
     /// Represents a page that is a view in a Web Forms Model-View-Presenter application.
     /// </summary>
-    public abstract class EPiView : TemplatePage, IEPiView
+    public abstract class EPiMvpPage : TemplatePage, IEPiView
     {
         /// <summary>
         /// Raises the <see cref="E:System.Web.UI.Control.Init"/> event to initialize the page.
@@ -25,7 +25,7 @@ namespace EPiMVP
     /// <summary>
     /// Represents a page that is a view with a strongly typed model in a Web Forms Model-View-Presenter application.
     /// </summary>
-    public abstract class EPiView<TModel> : EPiView, IEPiView<TModel> where TModel : class, new()
+    public abstract class EPiView<TModel> : EPiMvpPage, IEPiView<TModel> where TModel : class, new()
     {
         TModel _model;
 
