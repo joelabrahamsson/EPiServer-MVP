@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Ninject;
 using Ninject.Parameters;
 using PageTypeBuilder;
@@ -18,6 +19,13 @@ namespace EPiMVP.Ninject
             if (kernel == null)
                 throw new ArgumentException("kernel cannot be null");
             Kernel = kernel;
+        }
+
+        protected override bool CanUseConstructor(ConstructorInfo constructor, Type viewType, Type pageDataType)
+        {
+            var constructorParameters = constructor.GetParameters();
+            return constructorParameters[0].ParameterType.IsAssignableFrom(viewType) &&
+                   constructorParameters[1].ParameterType.IsAssignableFrom(pageDataType);
         }
 
         protected override IPresenter CreatePresenterInstance(Type presenterType, TypedPageData pageData, Type viewType, IEPiView view)
