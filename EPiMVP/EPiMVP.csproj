@@ -65,6 +65,15 @@
     <Compile Include="EPiMvpPage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="EPiMvpPage`T.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EPiMvpUserControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EPiMvpUserControl`T.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="EPiPresenter.cs" />
     <Compile Include="EPiPresenterFactory.cs" />
     <Compile Include="IEPiView.cs" />
