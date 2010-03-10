@@ -47,11 +47,5 @@ namespace EPiMVP
                 _model = value;
             }
         }
-
-        protected override void OnPreRenderComplete(EventArgs e)
-        {
-            DataBind();
-            base.OnPreRenderComplete(e);
-        }
     }
 }
