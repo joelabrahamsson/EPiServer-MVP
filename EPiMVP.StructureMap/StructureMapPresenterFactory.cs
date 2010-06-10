@@ -8,6 +8,13 @@ namespace EPiMVP.StructureMap
 {
     public class StructureMapPresenterFactory : EPiPresenterFactory
     {
+        private IContainer container;
+
+        public StructureMapPresenterFactory(IContainer container)
+        {
+            this.container = container;
+        }
+
         protected override bool CanUseConstructor(ConstructorInfo constructor, Type viewType, Type pageDataType)
         {
             var constructorParameters = constructor.GetParameters();
@@ -31,10 +38,10 @@ namespace EPiMVP.StructureMap
             ParameterInfo[] parameters = constructorToUse.GetParameters();
             object[] constructorParametersToUse = new object[parameters.Length];
             constructorParametersToUse[0] = view;
-            constructorParametersToUse[1] = (TypedPageData)view.CurrentPage;
+            constructorParametersToUse[1] = view.CurrentPage;
             for (int i = 2; i < constructorParametersToUse.Length; i++)
             {
-                constructorParametersToUse[i] =ObjectFactory.GetInstance(parameters[i].ParameterType);
+                constructorParametersToUse[i] = container.GetInstance(parameters[i].ParameterType);
             }
             return (IPresenter)Activator.CreateInstance(presenterType, constructorParametersToUse);
         }
