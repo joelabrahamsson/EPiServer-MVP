@@ -41,12 +41,12 @@ namespace EPiMVP.StructureMap
             constructorParametersToUse[1] = view.CurrentPage;
             for (int i = 2; i < constructorParametersToUse.Length; i++)
             {
-                constructorParametersToUse[i] = ResolveParameter(parameters[i].ParameterType, i);
+                constructorParametersToUse[i] = ResolveParameter(parameters[i].ParameterType, i, view);
             }
             return (IPresenter)Activator.CreateInstance(presenterType, constructorParametersToUse);
         }
 
-        protected virtual object ResolveParameter(Type parameterType, int parameterIndex)
+        protected virtual object ResolveParameter(Type parameterType, int parameterIndex, IEPiView view)
         {
             return container.GetInstance(parameterType);
         }
