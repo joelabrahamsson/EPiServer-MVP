@@ -10,6 +10,6 @@ namespace EPiMVP
 
     public interface IEPiView : IView
     {
-        PageData CurrentPage { get; set; }
+        PageData CurrentPage { get; }
     }
 }

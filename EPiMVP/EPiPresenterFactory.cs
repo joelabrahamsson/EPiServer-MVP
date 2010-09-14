@@ -34,11 +34,11 @@ namespace EPiMVP
             Type genericPresenterViewType = GetGenericPresenterViewType(viewType);
 
             // Validate and check the Presenter type.
-            var correctPresenterType = typeof(EPiPresenter<,>).MakeGenericType(new Type[] { genericPresenterViewType, pageDataType });
-            if (!presenterType.IsSubclassOf(correctPresenterType))
-                throw new InvalidCastException("Tried to create presenter of type " +presenterType + 
-                    ". This kernel can (and should) only create presenters that are a subclass of " + correctPresenterType + "."+
-                    " This bugger, however, is a subclass of " + presenterType.BaseType);
+            //var correctPresenterType = typeof(EPiPresenter<,>).MakeGenericType(new Type[] { genericPresenterViewType, pageDataType });
+            //if (!presenterType.IsSubclassOf(correctPresenterType))
+            //    throw new InvalidCastException("Tried to create presenter of type " +presenterType + 
+            //        ". This kernel can (and should) only create presenters that are a subclass of " + correctPresenterType + "."+
+            //        " This bugger, however, is a subclass of " + presenterType.BaseType);
             
             // Check if the Presenter has a usable constructor.
             if (!CanCreateInstance(viewType, pageDataType, presenterType))
