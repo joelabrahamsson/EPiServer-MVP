@@ -24,8 +24,10 @@ namespace EPiMVP.Ninject
         protected override bool CanUseConstructor(ConstructorInfo constructor, Type viewType, Type pageDataType)
         {
             var constructorParameters = constructor.GetParameters();
-            return constructorParameters[0].ParameterType.IsAssignableFrom(viewType) &&
-                   constructorParameters[1].ParameterType.IsAssignableFrom(pageDataType);
+            return
+                constructorParameters.Length >= 2 &&
+                constructorParameters[0].ParameterType.IsAssignableFrom(viewType) &&
+                constructorParameters[1].ParameterType.IsAssignableFrom(pageDataType);
         }
 
         protected override IPresenter CreatePresenterInstance(Type presenterType, TypedPageData pageData, Type viewType, IEPiView view)

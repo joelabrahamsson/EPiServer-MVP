@@ -6,6 +6,8 @@ using WebFormsMvp.Binder;
 
 namespace EPiMVP
 {
+    using System.Linq;
+
     /// <summary>
     /// A IPresenterFactory that can act as a Factory for the PresenterBinder in the Web Forms MVP framework,
     /// customized to work specifically with the EPiServer extensions to the Web Forms MVP framework.
@@ -30,8 +32,6 @@ namespace EPiMVP
                 throw new NullReferenceException("CurrentPage property of the viewInstance was null. The presenter needs a proper page data to render. ");
 
             Type pageDataType = GetPageDataType(epiView);
-
-            Type genericPresenterViewType = GetGenericPresenterViewType(viewType);
 
             // Validate and check the Presenter type.
             //var correctPresenterType = typeof(EPiPresenter<,>).MakeGenericType(new Type[] { genericPresenterViewType, pageDataType });
@@ -58,38 +58,10 @@ namespace EPiMVP
             return pageDataType;
         }
 
-        private Type GetGenericPresenterViewType(Type viewType)
-        {
-            // Find out if the View is abstracted into an interface with the same name
-            // I.e. WidgetView -> IWidgetView
-            Type abstractionInterface = null;
-            var codeBehind = viewType.BaseType; // We want the codebehind name, not "ASP.views_widgetview_aspx"
-            if (codeBehind != null) // The will be no base type if we are mocking the interface directly
-            {
-                foreach (var iface in codeBehind.GetInterfaces())
-                {
-                    if (iface.Name == "I" + codeBehind.Name)
-                        abstractionInterface = iface;
-                }
-            }
-
-            // If it is abstracted, expect the presenter to use the abstraction. 
-            // Otherwise, use the vanilla viewtype. 
-            return abstractionInterface ?? viewType;
-        }
-
         protected virtual bool CanCreateInstance(Type viewType, Type pageDataType, Type presenterType)
         {
-            var constructors = presenterType.GetConstructors();
-            foreach (var constructor in constructors)
-            {
-                if (CanUseConstructor(constructor, viewType, pageDataType))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return presenterType.GetConstructors().Any(
+                    constructor => CanUseConstructor(constructor, viewType, pageDataType));
         }
 
         protected virtual bool CanUseConstructor(ConstructorInfo constructor, Type viewType, Type pageDataType)
@@ -110,8 +82,6 @@ namespace EPiMVP
         {
             return (IPresenter)Activator.CreateInstance(presenterType, new object[] { view, pageData });
         }
-        
-        
 
         /// <summary>
         /// Releases the specified presenter.
