@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using PageTypeBuilder;
 using StructureMap;
@@ -18,21 +19,21 @@ namespace EPiMVP.StructureMap
         protected override bool CanUseConstructor(ConstructorInfo constructor, Type viewType, Type pageDataType)
         {
             var constructorParameters = constructor.GetParameters();
-            return constructorParameters[0].ParameterType.IsAssignableFrom(viewType) &&
-                   constructorParameters[1].ParameterType.IsAssignableFrom(pageDataType);
+            return
+                constructorParameters.Length >= 2 &&
+                constructorParameters[0].ParameterType.IsAssignableFrom(viewType) &&
+                constructorParameters[1].ParameterType.IsAssignableFrom(pageDataType);
         }
 
         protected override IPresenter CreatePresenterInstance(Type presenterType, TypedPageData pageData, Type viewType, IEPiView view)
         {
-            ConstructorInfo constructorToUse = null;
             var constructors = presenterType.GetConstructors();
-            foreach (var constructor in constructors)
+            var pageDataType = GetPageDataType(view);
+            ConstructorInfo constructorToUse = constructors.FirstOrDefault(c => CanUseConstructor(c, viewType, pageDataType));
+            if (constructorToUse == null)
             {
-                if (CanUseConstructor(constructor, viewType, GetPageDataType(view)))
-                {
-                    constructorToUse = constructor;
-                    break;
-                }
+                throw new NullReferenceException("Did not find a suitable constructor on the presenter of type " + presenterType + ". "
+                                 + "The presenter constructor requires at least two parameters, the FIRST one accepting a " + viewType + " and a the SECOND one a " + pageDataType + ".");
             }
 
             ParameterInfo[] parameters = constructorToUse.GetParameters();
